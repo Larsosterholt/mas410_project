@@ -19,6 +19,11 @@ g = 9.81;
 w_hpu = 6;
 zeta_hpu = 1;
 
+% Valve transfer function
+w_valve = 2*pi*50;
+zeta_valve = 1;
+deltap_valve_set = 15*1e5;
+
 % Non fixed parameters
 Dm = 100; % motor dispalcemant
 nm = 2; % Number of motors
@@ -28,6 +33,6 @@ Cd = 0.7;
 Ad = 40/1e6; % m^2
 nv = 2; % Number of valves
 
-Dmax = 400; % cm^3/ref
+Dmax = 50; % cm^3/ref
 np = 2;
 nmaxp = 2700;
