@@ -15,6 +15,10 @@ mu_eq = 0.15; %
 w0 = 5;
 g = 9.81;
 
+% Pump transfer function
+w_hpu = 6;
+zeta_hpu = 1;
+
 % Non fixed parameters
 Dm = 100; % motor dispalcemant
 nm = 2; % Number of motors
@@ -23,3 +27,7 @@ eta = 0.92;
 Cd = 0.7;
 Ad = 40/1e6; % m^2
 nv = 2; % Number of valves
+
+Dmax = 400; % cm^3/ref
+np = 2;
+nmaxp = 2700;
