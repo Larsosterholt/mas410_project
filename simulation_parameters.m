@@ -26,13 +26,16 @@ deltap_valve_set = 15*1e5;
 
 % Non fixed parameters
 Dm = 100; % motor dispalcemant
-nm = 2; % Number of motors
+nm = 4; % Number of motors
 eta = 0.92;
 
 Cd = 0.7;
-Ad = 40/1e6; % m^2
+Ad = 78/1e6; % m^2
+valve_max_stroke = 1.2/1000; %mm
 nv = 2; % Number of valves
 
 Dmax = 50; % cm^3/ref
 np = 2;
 nmaxp = 2700;
+
+%x = sim("heave_comp.slx")
