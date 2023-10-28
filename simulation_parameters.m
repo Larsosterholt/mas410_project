@@ -25,17 +25,24 @@ zeta_valve = 1;
 deltap_valve_set = 15*1e5;
 
 % Non fixed parameters
-Dm = 100; % motor dispalcemant
+Dm = 28; % motor dispalcemant
 nm = 4; % Number of motors
 eta = 0.92;
+nmax_motor = 8000;
+inertia_motor = 0.0012;
 
 Cd = 0.7;
 Ad = 78/1e6; % m^2
 valve_max_stroke = 1.2/1000; %mm
-nv = 2; % Number of valves
+nv = 1; % Number of valves
 
 Dmax = 50; % cm^3/ref
 np = 2;
 nmaxp = 2700;
 
-%x = sim("heave_comp.slx")
+
+% Calculating gear ratio between wire and motor
+n = 1/((dD*dp)/(2*nsh*dR*2*ig));%ig*(dR/dp)/(dD/2)*(nsh)
+
+% Calculating load inertia expeienced by the motor(s)
+J = mpl*(dD/2)^2*(1/n)^2;
