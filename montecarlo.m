@@ -38,25 +38,32 @@ deltap_valve_set = 15*1e5;
 motor_param = readtable('motor_parameters.csv');
 
 % Create table to save the results
+% number_simulations = 224;
+% sim_result.motor_disp(1:number_simulations) = 0;
+% sim_result.number_of_motors(1:number_simulations) = 0;
+% sim_result.number_of_valves(1:number_simulations) = 0;
+% sim_result.error_rms(1:number_simulations) = 0;
+% sim_result.flow_max(1:number_simulations) = 0;
+% sim_result.flow_rms(1:number_simulations) = 0;
+% sim_result.motor_cost(1:number_simulations) = 0;
+% sim_result.valve_cost(1:number_simulations) = 0;
+%
+%
+% sim_result_table = struct2table(sim_result)
+
 number_simulations = 224;
-sim_result.simulation_number(1:number_simulations) = 0;
-sim_result.error_rms(1:number_simulations) = 0;
-sim_result.flow_max(1:number_simulations) = 0;
-sim_result.flow_rms(1:number_simulations) = 0;
-sim_result.motor_cost(1:number_simulations) = 0;
-sim_result.valve_cost(1:number_simulations) = 0;
 
+names = {'motor_disp', 'number_of_motors', 'number_of_valves', 'error_rms', 'flow_max', 'flow_rms', 'motor_cost', 'valve_cost'};
+data_types = {'double', 'double', 'double', 'double', 'double', 'double', 'double', 'double'};
+sim_result_table = table('Size', [number_simulations, 8], 'VariableTypes', data_types, 'VariableNames', names);
 
-sim_result_table = struct2table(sim_result)
-
-model = 'heave_comp.slx';
-%set_param(model, "DisplayErrorDirections", "false")
-%Simulink.SuppressedDiagnostic(model)
 
 idx = 1;
-for number_of_motors = 1:2%1:8
-    for number_of_valves = 2:2%1:4
-        for motor_number = 6:6%1:motor_param.motor(end)
+
+tic
+for number_of_motors = 1:8
+    for number_of_valves = 1:4
+        for motor_number = 1:motor_param.motor(end)
             % Setting varibles for simulation:
             Dm = motor_param.displacement(motor_number);
             nm = number_of_motors;
@@ -66,8 +73,8 @@ for number_of_motors = 1:2%1:8
 
             % Simulate with the current parameters
             try
-                result = sim(model);
-                fprintf("Simulating...\n");    
+                result = sim('heave_comp.slx');
+                fprintf("Simulating...\n");
                 % Extractin position error and flow from simulation data
                 % and calculating cost
                 error = result.error.data(1,1, :);
@@ -82,10 +89,23 @@ for number_of_motors = 1:2%1:8
                 Csv = 401;
             end
 
+            sim_result_table.motor_disp(idx) = Dm;
+            sim_result_table.number_of_motors(idx) = nm;
+            sim_result_table.number_of_valves(idx) = nv;
+            sim_result_table.error_rms(idx) = rms(error);
+            sim_result_table.flow_max(idx) = max(abs(flow));
+            sim_result_table.flow_rms(idx) = rms(flow);
+            sim_result_table.motor_cost(idx) = Cm;
+            sim_result_table.valve_cost(idx) = Csv;
+            writetable(sim_result_table, "simulation_results.csv");
             idx = idx + 1;
         end
+        % Write to file for every 7 simulation just in case
+        writetable(sim_result_table, "simulation_results.csv");
+        toc
     end
 end
+toc
 
 
 % Non fixed parameters
