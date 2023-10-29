@@ -50,10 +50,10 @@ sim_result_table = table('Size', [number_simulations, 10], 'VariableTypes', data
 idx = 1;
 tic % Starting timer
 for valve_number = 1:valve_param.Valve(end)
-    for number_of_motors = 3:3 %1:max_number_of_motors
-        for number_of_valves = 2:2 %1:max_number_of_valves
-            for motor_number = 4:4 %1:motor_param.motor(end)
-                fprintf('Performed %i simulatins out of a total of %i\n', idx, number_simulations);
+    for number_of_motors = 1:max_number_of_motors
+        for number_of_valves = 1:max_number_of_valves
+            for motor_number = 1:motor_param.motor(end)
+                fprintf('\nPerformed %i simulatins out of a total of %i\n', idx, number_simulations);
                 toc
 
                 % Setting varibles for simulation:
@@ -76,7 +76,7 @@ for valve_number = 1:valve_param.Valve(end)
                     Cm = 2*nm*(1 + Dm/1000);
                     Csv = 2.5*nv*(1 + valve_param.Qnl(valve_number)/200);
                 catch
-                    warning('Simulation failed, setting nan as values\n')
+                    warning('Simulation failed, setting nan as values')
                     error = nan;
                     flow = nan;
                     Cm = nan;
@@ -100,6 +100,7 @@ for valve_number = 1:valve_param.Valve(end)
         end
         % Write to file for every 32-th simulation just in case
         writetable(sim_result_table, "simulation_results.csv");
+        clc;
     end
 end
 
