@@ -10,11 +10,19 @@ w_hpu = 6;
 
 
 
-gains_0 = [8; 0; 0.66667; 1];
-upperBound = [20; 20; 20; 2];
-lowerBound = [0; 0; 0; 0];
+gains_0 = [8, 0, 0.66667, 1];
+upperBound = [20, 20, 20, 2];
+lowerBound = [0, 0, 0, 0];
+A = [];
+B = [];
+Aeq = [];
+beq = [];
+nonlcon = [];
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
+%  'interior-point'
+%result = costFun(gains_0)
+gains = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
 
-result = costFun(gains_0)
 
 function cost = costFun(gains)
 %global rho g w_valve zeta_valve deltap_valve_set Dm nm
@@ -42,16 +50,16 @@ zeta_valve = 1;
 deltap_valve_set = 15*1e5;
 
 % Non fixed parameters, corresponding to the choise of sytem
-Dm = 28; % motor dispalcemant
-nm = 2; % Number of motors
+Dm = 4.93; % motor dispalcemant
+nm = 5; % Number of motors
 eta = 0.92;
 nmax_motor = 8000;
 inertia_motor = 0.0012;
 Cd = 0.7;
 %Ad = (100/6e4)/(Cd*sqrt(2/875*(70*1e5)/2));
-Ad = (150/6e4)/(Cd*sqrt(2/875*(70*1e5)/2));
-%Ad = (200/6e4)/(Cd*sqrt(2/875*(70*1e5)/2));
-nv = 3; % Number of valves
+%Ad = (150/6e4)/(Cd*sqrt(2/875*(70*1e5)/2));
+Ad = (200/6e4)/(Cd*sqrt(2/875*(70*1e5)/2));
+nv = 1; % Number of valves
 
 
 % Calculating gear ratio between wire and motor
