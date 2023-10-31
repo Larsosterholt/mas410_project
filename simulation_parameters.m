@@ -43,7 +43,6 @@ nv = 3; % Number of valves
 
 Dmax = 50; % cm^3/ref
 np = 2;
-nmaxp = 2700;
 
 
 % Calculating gear ratio between wire and motor
