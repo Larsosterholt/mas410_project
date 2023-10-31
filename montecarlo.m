@@ -12,6 +12,8 @@ dp = 0.15; % m
 mu_eq = 0.15; %
 w0 = 5;
 g = 9.81;
+rho = 875;
+
 
 % Calculating gear ratio between wire and motor
 n = 1/((dD*dp)/(2*nsh*dR*2*ig));%ig*(dR/dp)/(dD/2)*(nsh)
@@ -62,13 +64,14 @@ for valve_number = 1:valve_param.Valve(end)
                 nmax_motor = motor_param.max_rpm(motor_number);
                 inertia_motor = motor_param.inertia(motor_number);
                 nv = number_of_valves;
-                valve_max_stroke = valve_param.stroke(valve_number)/1000;
+                %valve_max_stroke = valve_param.stroke(valve_number)/1000;
                 Ad = valve_param.Ad(valve_number)/1e6; % m^2
                 
                 % Simulate with the current parameters
                 try
                     result = sim('heave_comp.slx');
                     fprintf("Simulating...\n");
+
                     % Extractin position error and flow from simulation data
                     % and calculating cost
                     error = result.error.data(1,1, :);
@@ -90,12 +93,11 @@ for valve_number = 1:valve_param.Valve(end)
                 sim_result_table.error_rms(idx) = rms(error);
                 sim_result_table.flow_max(idx) = max(abs(flow));
                 sim_result_table.flow_rms(idx) = rms(flow);
-                sim_result_table.valve_size(idx) = valve_max_stroke*1000;
+                sim_result_table.valve_size(idx) = valve_number;
                 sim_result_table.motor_cost(idx) = Cm;
                 sim_result_table.valve_cost(idx) = Csv;
                 sim_result_table.total_cost(idx) = Cm + Csv;
                 idx = idx + 1;
-                %clc;
             end
         end
         % Write to file for every 32-th simulation just in case

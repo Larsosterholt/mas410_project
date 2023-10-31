@@ -14,6 +14,7 @@ dp = 0.15; % m
 mu_eq = 0.15; %
 w0 = 5;
 g = 9.81;
+rho = 875
 
 % Pump transfer function
 w_hpu = 6;
@@ -32,9 +33,13 @@ nmax_motor = 8000;
 inertia_motor = 0.0012;
 
 Cd = 0.7;
-Ad = 78/1e6; % m^2
-valve_max_stroke = 1.2/1000; %mm
-nv = 2; % Number of valves
+%Ad = 78/1e6; % m^2
+Ad = (100/6e4)/(Cd*sqrt(2/875*(70*1e5)/2))
+Ad = (150/6e4)/(Cd*sqrt(2/875*(70*1e5)/2))
+%Ad = (200/6e4)/(Cd*sqrt(2/875*(70*1e5)/2))
+
+%valve_max_stroke = 1.2/1000; %mm
+nv = 3; % Number of valves
 
 Dmax = 50; % cm^3/ref
 np = 2;
