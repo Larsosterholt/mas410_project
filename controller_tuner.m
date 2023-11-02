@@ -1,18 +1,10 @@
 clc; clear; close all;
 
-%global zw Tw fw nsh ig mpl dD dR dp mu_eq w0 g
 
 
-% Pump transfer function
-w_hpu = 6;
-
-
-
-
-
-gains_0 = [8, 0, 0.66667, 1];
-upperBound = [20, 20, 20, 2];
-lowerBound = [0, 0, 0, 0];
+gains_0 = [8, 0, 0.66667, 0, 0];
+upperBound = [20, 20, 20, 2, 2];
+lowerBound = [0, 0, 0, -2, -2];
 A = [];
 B = [];
 Aeq = [];
@@ -20,15 +12,17 @@ beq = [];
 nonlcon = [];
 options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
 %  'interior-point'
-%result = costFun(gains_0)
-gains = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+%gains = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+
+
+%[utmost_controller_Kp, utmost_controller_Kd, inner_controller_Kp, Kv_pos, Kv_neg]
+optimal_gain = [12.1176 0.0000 0.4409 -0.6268 0.3420]; % Gains from fmincon
+my_gain = [8 0 1.5 1 1] % Manually tuned gains
+error_RMS = costFun(optimal_gain)
+
 
 
 function cost = costFun(gains)
-%global rho g w_valve zeta_valve deltap_valve_set Dm nm
-%global nmax_motor inertia_motor Ad nv J n utmost_controller_Kp
-%global utmost_controller_Kd inner_controller_Kp Kv
-
 % Fixed parameters
 zw = 1.5; % m
 Tw = 10; % s
@@ -72,7 +66,9 @@ J = mpl*(dD/2)^2*(1/n)^2;
 utmost_controller_Kp = gains(1);
 utmost_controller_Kd = gains(2);
 inner_controller_Kp = gains(3);
-Kv = gains(4);
+Kv_pos = gains(4);
+Kv_neg = gains(5);
+
 
 % Simulation
 modelname = 'heave_comp_controler_tuner';
