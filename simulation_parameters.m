@@ -29,8 +29,8 @@ deltap_valve_set = 15*1e5;
 Dm = 4.93;%28.1; % motor dispalcemant
 nm = 5;%2; % Number of motors
 eta = 0.92;
-nmax_motor = 8000;
-inertia_motor = 0.0012;
+nmax_motor = 10000;
+inertia_motor = 0.00006;
 
 Cd = 0.7;
 %Ad = 78/1e6; % m^2

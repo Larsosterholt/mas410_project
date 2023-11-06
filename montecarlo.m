@@ -43,10 +43,18 @@ max_number_of_valves = 4;
 
 
 % Creat table for the results
-number_simulations = valve_param.Valve(end)*motor_param.motor(end)*max_number_of_motors*max_number_of_valves;
-names = {'valve_size', 'motor_disp', 'number_of_motors', 'number_of_valves', 'error_rms', 'flow_max', 'flow_rms', 'motor_cost', 'valve_cost', 'total_cost'};
-data_types = {'double','double', 'double', 'double', 'double', 'double', 'double', 'double', 'double', 'double'};
-sim_result_table = table('Size', [number_simulations, 10], 'VariableTypes', data_types, 'VariableNames', names);
+number_simulations = valve_param.Valve(end)*motor_param.motor(end)*...
+    max_number_of_motors*max_number_of_valves;
+
+names = {'valve_size', 'motor_disp', 'number_of_motors', ... 
+    'number_of_valves', 'error_rms', 'flow_max', 'flow_rms', ...
+    'motor_cost', 'valve_cost', 'total_cost'};
+
+data_types = {'double','double', 'double', 'double', 'double',...
+    'double', 'double', 'double', 'double', 'double'};
+
+sim_result_table = table('Size', [number_simulations, 10], ...
+    'VariableTypes', data_types, 'VariableNames', names);
 
 
 idx = 1;
@@ -55,7 +63,8 @@ for valve_number = 1:valve_param.Valve(end)
     for number_of_motors = 1:max_number_of_motors
         for number_of_valves = 1:max_number_of_valves
             for motor_number = 1:motor_param.motor(end)
-                fprintf('\nPerformed %i simulatins out of a total of %i\n', idx, number_simulations);
+                fprintf(['\nPerformed %i simulatins...' ...
+                    ' out of a total of %i\n'], idx, number_simulations);
                 toc
 
                 % Setting varibles for simulation:
@@ -107,7 +116,8 @@ for valve_number = 1:valve_param.Valve(end)
 end
 
 writetable(sim_result_table, "simulation_results.csv");
-fprintf('Performed %i simulatins out of a total of %i\n', idx, number_simulations);
+fprintf('Performed %i simulatins out of a total of %i\n', ...
+    idx, number_simulations);
 fprintf('Finished\n');
 toc
 

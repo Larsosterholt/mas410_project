@@ -1,42 +1,51 @@
 clc; clear; close all;
+% [utmost_controller_Kp, utmost_controller_Kd, inner_controller_Kp, Kv_pos, Kv_neg]
 
 
 
-gains_0 = [8, 0, 0.66667, 0, 0];
-upperBound = [20, 20, 20, 2, 2];
-lowerBound = [0, 0, 0, -2, -2];
+% Initial gains:
+%gains_0 = [8, 0, 0.66667, 0, 0]; -> optimal_gains = [12.1176 0.0000 0.4409 -0.6268 0.3420];
+%gains_0 = [0, 0, 1, 0.25, 0.03]; % -> optimal_gains2 = [20.0000 0.6559 2.5116 0 0]
+gains_0 = [8 0 1.5 1 1];
+
+
+%upperBound = [20, 20, 20, 1, 1];
+%lowerBound = [0, 0, 0, 0, 0];
+upperBound = [8, 20, 20, 1, 1];
+lowerBound = [8, 0, 0, 0, 0];
 A = [];
 B = [];
 Aeq = [];
 beq = [];
 nonlcon = [];
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
+%options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
 %  'interior-point'
-%gains = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+gains = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
 
 
-%[utmost_controller_Kp, utmost_controller_Kd, inner_controller_Kp, Kv_pos, Kv_neg]
-optimal_gain = [12.1176 0.0000 0.4409 -0.6268 0.3420]; % Gains from fmincon
-my_gain = [8 0 1.5 1 1] % Manually tuned gains
-error_RMS = costFun(optimal_gain)
+% For testing
+%optimal_gains = [12.1176 0.0000 0.4409 -0.6268 0.3420]; % Gains from fmincon
+%optimal_gains2 = [20.0000 0.6559 2.5116 0 0]
+%my_gain = [8 0 1.5 1 1] % Manually tuned gains
+%error_RMS = costFun(my_gain)
 
 
 
 function cost = costFun(gains)
 % Fixed parameters
-zw = 1.5; % m
-Tw = 10; % s
-fw = 1/Tw; % Hz
+%zw = 1.5; % m
+%Tw = 10; % s
+%fw = 1/Tw; % Hz
 nsh = 2; % Number of sheaves
 ig = 11; % [-]
 mpl = 18000; % kg
 dD = 0.45; % m
 dR = 0.5; % m
 dp = 0.15; % m
-mu_eq = 0.15; %
-w0 = 5;
+%mu_eq = 0.15; %
+%w0 = 5;
 g = 9.81;
-rho = 875;
+%rho = 875;
 
 % Valve transfer function
 w_valve = 2*pi*50;
