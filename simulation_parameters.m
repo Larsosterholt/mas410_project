@@ -14,7 +14,7 @@ dp = 0.15; % m
 mu_eq = 0.15; %
 w0 = 5;
 g = 9.81;
-rho = 875
+rho = 875;
 
 % Pump transfer function
 w_hpu = 6;
