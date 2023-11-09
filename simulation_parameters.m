@@ -26,8 +26,8 @@ zeta_valve = 1;
 deltap_valve_set = 15*1e5;
 
 % Non fixed parameters
-Dm = 4.93;%28.1; % motor dispalcemant
-nm = 5;%2; % Number of motors
+Dm = 32;% % motor dispalcemant
+nm = 3; % Number of motors
 eta = 0.92;
 nmax_motor = 10000;
 inertia_motor = 0.00006;
@@ -39,7 +39,7 @@ Cd = 0.7;
 Ad = (200/6e4)/(Cd*sqrt(2/875*(70*1e5)/2))
 
 %valve_max_stroke = 1.2/1000; %mm
-nv = 1;%2; % Number of valves
+nv = 2; % Number of valves
 
 Dmax = 50; % cm^3/ref
 np = 2;
