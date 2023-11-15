@@ -15,17 +15,18 @@ beq = [];
 nonlcon = [];
 
 % Optimizing
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
-gains0 = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results\gains0_rms.mat', "gains0");
-gains1 = fmincon(@costFun, gains_1, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results\gains1_rms.mat', "gains1");
-gains2 = fmincon(@costFun, gains_2, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results\gains2_rms.mat', "gains2");
+%options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
+%options = optimoptions('fmincon','Display','iter');
+%gains0 = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+%save('tuner_results_2\gains0_max.mat', "gains0");
+%gains1 = fmincon(@costFun, gains_1, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+%save('tuner_results_2\gains1_max.mat', "gains1");
+%gains2 = fmincon(@costFun, gains_2, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+%save('tuner_results_2\gains2_max.mat', "gains2");
 
 % For testing
-%gains_0 = [40 0 650 1 1]; 
-%error_RMS = costFun(gains_0)
+gains_0 = [40 0 650 1 1]; 
+error_RMS = costFun(gains2)
 
 function cost = costFun(gains)
 % Fixed parameters
@@ -78,6 +79,6 @@ end
 % Simulating and returning cost
 result = sim('heave_comp_controler_tuner.slx');
 error = result.error.data(1,1, :);
-cost = rms(error);
-%max(abs(error))
+maks = max(abs(error))*1000
+cost = rms(error)*1000;
 end
