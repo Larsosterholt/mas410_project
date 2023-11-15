@@ -1,10 +1,11 @@
-%clc; clear; close all;
+clc; clear; close all;
 % [utmost_controller_Kp, utmost_controller_Kd, inner_controller_Kp, Kv_pos, Kv_neg]
 
 % Initial gains:
 gains_0 = [16 0 750 1 1]; 
 gains_1 = [40 0 650 1 1]; 
 gains_2 = [40 0 650 0 0]; 
+
 
 upperBound = [100, 20, 1000, 10, 10];
 lowerBound = [0, 0, 0, -10, -10];
@@ -16,18 +17,19 @@ nonlcon = [];
 
 % Optimizing
 %options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
-%options = optimoptions('fmincon','Display','iter');
-%gains0 = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results_2\gains0_max.mat', "gains0");
-%gains1 = fmincon(@costFun, gains_1, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results_2\gains1_max.mat', "gains1");
-%gains2 = fmincon(@costFun, gains_2, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
-%save('tuner_results_2\gains2_max.mat', "gains2");
+% options = optimoptions('fmincon','Display','iter'); % Defalt optimizer
+% gains0_optimized = fmincon(@costFun, gains_0, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+% save('tuner_results\gains0_max.mat', "gains0_optimized");
+% gains1_optimized = fmincon(@costFun, gains_1, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+% save('tuner_results\gains1_max.mat', "gains1_optimized");
+% gains2_optimized = fmincon(@costFun, gains_2, A, B, Aeq, beq, lowerBound, upperBound, nonlcon, options)
+% save('tuner_results\gains2_max.mat', "gains2_optimized");
 
 % For testing
 gains_0 = [40 0 650 1 1]; 
-error_RMS = costFun(gains2)
+error_RMS = costFun(gains_0)
 
+%% Cost function
 function cost = costFun(gains)
 % Fixed parameters
 nsh = 2; % Number of sheaves
@@ -66,7 +68,7 @@ inner_controller_Kp = gains(3);
 Kv_pos = gains(4);
 Kv_neg = gains(5);
 
-% Simulation
+% Assigning parameter and controller gains to simulink model
 modelname = 'heave_comp_controler_tuner';
 hws = get_param(modelname, 'modelworkspace');
 list = whos;   % Get the list of variables defined in the function
@@ -79,6 +81,6 @@ end
 % Simulating and returning cost
 result = sim('heave_comp_controler_tuner.slx');
 error = result.error.data(1,1, :);
-maks = max(abs(error))*1000
+%cost = max(abs(error))*1000 
 cost = rms(error)*1000;
 end
