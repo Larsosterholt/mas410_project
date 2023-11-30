@@ -274,5 +274,5 @@ hold off
 grid on
 box on
 
-%filename1 = 'plt_4_280.eps';
+%filename1 = ['man_tune_plt_1.eps'];
 %saveas(fig,filename1, 'epsc');
